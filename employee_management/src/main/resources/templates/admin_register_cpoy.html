@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-red': {
+                            DEFAULT: '#c4322b',
+                            'light': '#d04b44',
+                            'dark': '#a52a24'
+                        },
+                        'brand-navy': {
+                            DEFAULT: '#1e2430',
+                            'light': '#2a3241',
+                            'dark': '#16191f'
+                        },
+                        'brand-cream': {
+                            DEFAULT: '#f5ecd6'
+                        },
+                        'brand-blue': {
+                            DEFAULT: '#1e3a8a'
+                        }
+                    },
+                    fontFamily: {
+                        'tahoma': ['Tahoma', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: #1e2430;  /* Changed from #1e2430 to white */
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar {
+            width: 110px;
+            min-height: 100vh;
+            background-color: #1e2430;
+            border-right: 2px solid #F8DE7E;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid #F8DE7E;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .nav-item {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #F8DE7E;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background-color: #F8DE7E;
+            color: #1e2430;
+        }
+
+        .nav-item.active {
+            background-color: #F8DE7E;
+            color: #1e2430;
+        }
+
+        .main-content {
+            margin-left: 110px;
+            padding: 2rem;
+        }
+
+        /* Sidebar layout */
+        .sidebar-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            z-index: 20;
+            transition: all 0.3s ease;
+        }
+        
+        .vertical-strip {
+            background-color: #1e2430;  /* Changed to navy color */
+            width: 110px;  /* Changed to match base.html */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 21;
+            position: relative;
+            padding-top: 40px;  /* Added to match base.html */
+        }
+        
+        /* Remove the navy-strip since we changed the background color */
+        .navy-strip {
+            display: none;
+        }
+        
+        /* Update vertical text container and text styles */
+        .vertical-text-container {
+            position: relative;
+            margin-top: 30px;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-orientation: mixed;
+            white-space: nowrap;
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+            display: flex;
+            height: 80%;
+            text-align: center;
+            justify-content: center;
+            letter-spacing: 26px;
+            color: #f5ecd6;  /* Changed to cream color */
+        }
+        
+        .hexagon-logo {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .hexagon-logo:hover {
+            transform: scale(1.1);
+        }
+
+        .hexagon-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .sidebar {
+            background-color: #1e2430;
+            width: 220px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 20;
+            transition: all 0.3s ease;
+            padding-top: 20px;
+        }
+        
+        .user-info {
+            color: #f5ecd6;
+            padding: 15px 20px;
+            font-size: 16px;
+            /* Removed the border-bottom property */
+            margin-bottom: 20px;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: flex-end; /* Move content to bottom */
+            padding-bottom: 20px; /* Add some padding at the bottom */
+        }
+        
+        .sidebar-title {
+            padding: 15px 20px;
+            color: #f5ecd6;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(245, 236, 214, 0.2);
+            border-bottom: 1px solid rgba(245, 236, 214, 0.1);
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .nav-link {
+            padding: 14px 20px;
+            color: #1e2430;  /* Dark text color */
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            background-color: #F8DE7E;  /* Yellow background */
+            border-radius: 8px;  /* Rounded corners */
+            margin: 0 12px;  /* Add some margin */
+        }
+        
+        .nav-link:hover {
+            opacity: 1;
+            background-color: #f5d76e;  /* Lighter yellow on hover */
+            color: #1e2430;
+        }
+        
+        .nav-link svg {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .sidebar-collapsed {
+            transform: translateX(-220px);
+        }
+    </style>
+</head>
+<body>
+    
+        
+        <!-- Main Sidebar Content -->
+        <div class="sidebar" id="sidebar">
+            <!-- Add logo section at the top -->
+            <div class="p-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-[#F8DE7E] rounded-lg flex items-center justify-center">
+                        <i class="fas fa-layer-group text-[#1e2430] text-sm"></i>
+                    </div>
+                    <span class="text-[#F8DE7E] font-semibold text-lg">Onboardly</span>
+                </div>
+            </div>
+   
+            <!-- Rest of the sidebar content -->
+            <div class="sidebar-content">
+                <!-- Navigation Links -->
+                <div class="nav-links">
+                     <a th:href="@{/admin/dashboard1}" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Go Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section>
+        <div class="container mx-auto p-6 max-w-4xl">
+           
+            <!-- Registration Form -->
+            <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-2xl shadow-xl p-8">
+                <form th:action="@{/admin/do_register}" method="post" enctype="multipart/form-data" class="space-y-6">
+                    <!-- Profile Picture Upload -->
+                    <div class="flex justify-center mb-6">
+                        <div class="relative group">
+                            <div class="w-32 h-32 border-4 border-[#F8DE7E] rounded-full overflow-hidden">
+                                <img id="previewImage" src="/img/profile/default.png" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                            <label for="imageFile" 
+                                   class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 
+                                          rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#F8DE7E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </label>
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" 
+                                   class="hidden" onchange="previewImage(event)">
+                        </div>
+                    </div>
+
+                    <!-- Form Fields in 2 columns -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Name and Email fields -->
+                        <div>
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Name</label>
+                            <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-lg p-3">
+                                <input type="text" name="name" required
+                                       class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none"
+                                       placeholder="Enter employee name">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Email</label>
+                            <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-lg p-3">
+                                <input type="email" name="email" required
+                                       class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none"
+                                       placeholder="Enter email address">
+                            </div>
+                        </div>
+
+                        <!-- Password and Phone fields -->
+                        <div>
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Password</label>
+                            <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-lg p-3">
+                                <input type="password" name="password" required
+                                       class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none"
+                                       placeholder="Enter password">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Phone</label>
+                            <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-lg p-3">
+                                <input type="tel" name="phone_no" required
+                                       class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none"
+                                       placeholder="Enter phone number">
+                            </div>
+                        </div>
+
+                        <!-- Designation and Salary fields -->
+                        <div>
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Designation</label>
+                            <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-lg p-3">
+                                <input type="text" name="designation"
+                                       class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none"
+                                       placeholder="Enter designation">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Salary</label>
+                            <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-lg p-3">
+                                <input type="text" name="salary"
+                                       class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none"
+                                       placeholder="Enter salary amount">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About field - Full width -->
+                    <div>
+                        <label class="block text-[#F8DE7E] text-sm font-bold mb-2">About</label>
+                        <div class="bg-[#1e2430] border-2 border-[#F8DE7E] rounded-lg p-3">
+                            <textarea name="about" rows="4"
+                                      class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none resize-none"
+                                      placeholder="Enter details about the employee"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end mt-8">
+                        <button type="submit" 
+                                class="px-8 py-3 bg-[#F8DE7E] text-gray-800 rounded-lg hover:bg-[#f5d76e] 
+                                       transition-all duration-300 font-semibold flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                            </svg>
+                            Register Employee
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('previewImage');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::Layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <section class="bg-[#1e2430] min-h-screen py-8">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <!-- Main Container -->
+            <div class="flex flex-col md:flex-row bg-[#252b3b] rounded-2xl overflow-hidden shadow-xl border-2 border-[#F8DE7E]">
+                <!-- Left Side - Logo and Welcome -->
+                <div class="w-full md:w-2/5 bg-[#F8DE7E] p-8 flex flex-col justify-center items-center">
+                    <div class="w-20 h-20 bg-[#252b3b] rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-12 h-12 text-[#F8DE7E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <p class="text-[#252b3b] text-center">Please login to access your account</p>
+                </div>
+                
+                <!-- Right Side - Form Section -->
+                <div class="w-full md:w-3/5 p-8">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-[#F8DE7E]">Login</h2>
+                        <p class="text-gray-400 mt-2">Enter the credentials to continue</p>
+                    </div>
+
+                    <!-- Alert Messages -->
+                    <div th:if="${param.error}" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+                        <p class="font-medium">Invalid username or password.</p>
+                    </div>
+
+                    <div th:if="${param.logout}" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+                        <p class="font-medium">You have been logged out successfully.</p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form novalidate th:action="@{/do-login}" method="post" class="space-y-6">
+                        <!-- Username Field -->
+                        <div>
+                            <label for="username" class="block text-[#F8DE7E] text-sm font-medium mb-2">Username</label>
+                            <input type="text" 
+                                   name="username" 
+                                   id="username" 
+                                   required
+                                   class="w-full px-4 py-3 bg-[#1e2430] border-2 border-gray-600 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:border-[#F8DE7E] transition-colors"
+                                   placeholder="Enter your username">
+                        </div>
+                        
+                        <!-- Password Field -->
+                        <div>
+                            <label for="password" class="block text-[#F8DE7E] text-sm font-medium mb-2">Password</label>
+                            <input type="password" 
+                                   name="password" 
+                                   id="password" 
+                                   required
+                                   class="w-full px-4 py-3 bg-[#1e2430] border-2 border-gray-600 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:border-[#F8DE7E] transition-colors"
+                                   placeholder="Enter your password">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-4">
+                            <button type="submit" 
+                                    class="w-full py-3 bg-[#F8DE7E] text-[#252b3b] rounded-lg font-bold text-lg hover:bg-[#f5d76e] transition-all duration-300 shadow-lg">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

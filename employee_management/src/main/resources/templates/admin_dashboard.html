@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin_base::Layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
+        body {
+            background-color: #1e2430;
+        }
+    </style>
+</head>
+<body class="bg-[#1e2430] min-h-screen w-full">
+    <section class="bg-[#1e2430] min-h-screen w-full">
+        <div class="w-full h-full p-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Total Employees Card -->
+                <div class="bg-[#F8DE7E] p-6 rounded-2xl">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-800 text-sm font-semibold">Total Employees</p>
+                            <h3 class="text-4xl font-bold text-gray-900 mt-2" th:text="${totalEmployees}">0</h3>
+                        </div>
+                        <i class="fas fa-users text-gray-800 text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- Total Salary Expense Card -->
+                <div class="bg-[#F8DE7E] p-6 rounded-2xl">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-800 text-sm font-semibold">Total Salary Expense</p>
+                            <h3 class="text-4xl font-bold text-gray-900 mt-2">₹<span th:text="${#numbers.formatDecimal(totalSalaryExpense, 0, 'COMMA', 0, 'POINT')}">0</span></h3>
+                        </div>
+                        <i class="fas fa-money-bill-wave text-gray-800 text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- Average Salary Card -->
+                <div class="bg-[#F8DE7E] p-6 rounded-2xl">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-800 text-sm font-semibold">Average Salary</p>
+                            <h3 class="text-4xl font-bold text-gray-900 mt-2">₹<span th:text="${#numbers.formatDecimal(averageSalary, 0, 'COMMA', 0, 'POINT')}">0</span></h3>
+                        </div>
+                        <i class="fas fa-chart-line text-gray-800 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Charts and Tables Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Salary by Designation Bar Chart -->
+                <div class="bg-[#252b3b] p-6 rounded-2xl border-2 border-[#F8DE7E]">
+                    <h2 class="text-xl font-bold text-[#F8DE7E] mb-6">Salary by Designation</h2>
+                    
+                    <div class="flex">
+                        <!-- Y-axis labels -->
+                        <div class="w-28 flex flex-col justify-between text-gray-400 text-sm h-64 pr-4">
+                            <span>₹300,000</span>
+                            <span>₹200,000</span>
+                            <span>₹100,000</span>
+                            <span>₹0</span>
+                        </div>
+
+                        <!-- Bar Chart Container -->
+                        <div class="flex-1">
+                            <div class="flex justify-around items-end h-64 relative">
+                                <!-- Grid lines -->
+                                <div class="absolute inset-0 flex flex-col justify-between -z-10">
+                                    <div class="border-t border-gray-700 w-full"></div>
+                                    <div class="border-t border-gray-700 w-full"></div>
+                                    <div class="border-t border-gray-700 w-full"></div>
+                                    <div class="border-t border-gray-700 w-full"></div>
+                                </div>
+
+                                <!-- Software Engineer Bar -->
+                                <div class="flex flex-col items-center">
+                                    <div class="bg-[#F8DE7E] w-24 rounded-t transition-all hover:bg-[#f5d76e]" style="height: 193.33px;">
+                                        <div class="text-center -mt-8 text-sm text-[#F8DE7E]">₹290,000</div>
+                                    </div>
+                                    <span class="text-[#F8DE7E] text-sm mt-4">Software Engineer</span>
+                                </div>
+
+                                <!-- Data Analyst Bar -->
+                                <div class="flex flex-col items-center">
+                                    <div class="bg-[#F8DE7E] w-24 rounded-t transition-all hover:bg-[#f5d76e]" style="height: 115.33px;">
+                                        <div class="text-center -mt-8 text-sm text-[#F8DE7E]">₹173,000</div>
+                                    </div>
+                                    <span class="text-[#F8DE7E] text-sm mt-4">Data Analyst</span>
+                                </div>
+
+                                <!-- HR Manager Bar -->
+                                <div class="flex flex-col items-center">
+                                    <div class="bg-[#F8DE7E] w-24 rounded-t transition-all hover:bg-[#f5d76e]" style="height: 123.33px;">
+                                        <div class="text-center -mt-8 text-sm text-[#F8DE7E]">₹185,000</div>
+                                    </div>
+                                    <span class="text-[#F8DE7E] text-sm mt-4">HR Manager</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Paid Employees -->
+                <div class="bg-[#252b3b] p-6 rounded-2xl border-2 border-[#F8DE7E]">
+                    <h2 class="text-xl font-bold text-[#F8DE7E] mb-6">Top Paid Employees</h2>
+                    <div class="space-y-4">
+                        <div th:each="employee : ${topPaidEmployees}" class="flex items-center justify-between">
+                            <span class="text-gray-300" th:text="${employee[0]}"></span>
+                            <span class="text-[#F8DE7E]">₹<span th:text="${employee[1]}"></span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Employee Section -->
+            <div class="mb-8 mx-8">
+                <h2 class="text-xl font-bold text-[#F8DE7E] mb-6">Manage Employee</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <!-- View Employee Card -->
+                    <div class="bg-[#F8DE7E] p-6 rounded-2xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-800 text-sm font-semibold">View Employees</p>
+                                <a href="/admin/users" class="inline-block mt-2">
+                                    <button class="bg-[#252b3b] text-[#F8DE7E] px-4 py-2 rounded-lg hover:bg-[#2f3646] transition-all">
+                                        View All
+                                    </button>
+                                </a>
+                            </div>
+                            <i class="fas fa-users-viewfinder text-gray-800 text-2xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Profile Card -->
+                    <div class="bg-[#F8DE7E] p-6 rounded-2xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-800 text-sm font-semibold">Your Profile</p>
+                                <a href="/admin/profile1" class="inline-block mt-2">
+                                    <button class="bg-[#252b3b] text-[#F8DE7E] px-4 py-2 rounded-lg hover:bg-[#2f3646] transition-all">
+                                        View Profile
+                                    </button>
+                                </a>
+                            </div>
+                            <i class="fas fa-user-circle text-gray-800 text-2xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Add Employee Card -->
+                    <div class="bg-[#F8DE7E] p-6 rounded-2xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-800 text-sm font-semibold">Add Employee</p>
+                                <a href="/admin/admin_register" class="inline-block mt-2">
+                                    <button class="bg-[#252b3b] text-[#F8DE7E] px-4 py-2 rounded-lg hover:bg-[#2f3646] transition-all">
+                                        Add New
+                                    </button>
+                                </a>
+                            </div>
+                            <i class="fas fa-user-plus text-gray-800 text-2xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Update Password Card -->
+                    <div class="bg-[#F8DE7E] p-6 rounded-2xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-800 text-sm font-semibold">Update Password</p>
+                                <form method="POST" th:action="@{'/admin/update-password'}" class="inline-block mt-2">
+                                    <button type="submit" class="bg-[#252b3b] text-[#F8DE7E] px-4 py-2 rounded-lg hover:bg-[#2f3646] transition-all">
+                                        Change Password
+                                    </button>
+                                </form>
+                            </div>
+                            <i class="fas fa-key text-gray-800 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin_base::Layout(~{::section})">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Profile</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <section>
+            <div th:object="${user}" class="container mx-auto p-0 md:p-6 max-w-7xl">
+                <!-- Main Container -->
+                <div class="flex flex-col md:flex-row bg-sidebar-bg border-2 border-[#F8DE7E] shadow-xl rounded-lg overflow-hidden my-8">
+                    <!-- Left Side - Profile Image -->
+                    <div class="w-full md:w-1/3 bg-sidebar-bg p-8 border-r border-[#F8DE7E]/30">
+                        <div class="flex flex-col items-center">
+                            <div class="w-32 h-32 mb-4">
+                                <img th:src="@{'/img/profile/' + ${user.imageUrl}}"
+                                     class="w-full h-full rounded-full object-cover border-4 border-[#F8DE7E]"
+                                     onerror="this.src='/img/profile/default.png'">
+                            </div>
+                            <h3 class="text-2xl font-bold text-[#F8DE7E] mb-2" th:text="${user.name}"></h3>
+                            <p class="text-gray-400 text-center" th:text="${user.designation ?: 'Admin'}"></p>
+                        </div>
+                    </div>
+
+                    <!-- Right Side - Profile Details -->
+                    <div class="w-full md:w-2/3 bg-sidebar-bg p-8">
+                        <div class="mb-6 flex justify-between items-center">
+                            <div class="flex items-center justify-between w-full">
+                                <h2 class="text-3xl font-bold text-[#F8DE7E]">Admin Profile</h2>
+                                <form method="POST" th:action="@{'/admin/update-user/' + ${user.user_id}}">
+                                    <button type="submit" 
+                                            class="flex items-center gap-2 px-6 py-2.5 bg-[#F8DE7E] hover:bg-[#f5d76e] 
+                                                   text-gray-800 rounded-lg transition-all duration-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                        <span class="font-medium">Edit Profile</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Alert Message -->
+                        <div th:if="${session.message}" class="mb-6">
+                            <div th:classappend="${session.message.type}" 
+                                 class="border-2 border-[#F8DE7E] text-[#F8DE7E] p-4 rounded-lg relative animate-fadeIn">
+                                <p class="font-bold" th:text="${session.message.content}"></p>
+                                <button onclick="this.parentElement.remove()" 
+                                        class="absolute top-2 right-2 text-[#F8DE7E] hover:text-[#f5d76e]">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- User Details Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Name -->
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Name</label>
+                                <p class="text-gray-300 border-2 border-[#F8DE7E] p-3 rounded-lg bg-sidebar-bg/50" th:text="${user.name}"></p>
+                            </div>
+                            <!-- Email -->
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Email</label>
+                                <p class="text-gray-300 border-2 border-[#F8DE7E] p-3 rounded-lg bg-sidebar-bg/50" th:text="${user.email}"></p>
+                            </div>
+                            <!-- Phone -->
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Phone</label>
+                                <p class="text-gray-300 border-2 border-[#F8DE7E] p-3 rounded-lg bg-sidebar-bg/50" th:text="${user.phone_no}"></p>
+                            </div>
+                            <!-- Designation -->
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Designation</label>
+                                <p class="text-gray-300 border-2 border-[#F8DE7E] p-3 rounded-lg bg-sidebar-bg/50" th:text="${user.designation ?: 'Not specified'}"></p>
+                            </div>
+                            <!-- Salary -->
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Salary</label>
+                                <p class="text-gray-300 border-2 border-[#F8DE7E] p-3 rounded-lg bg-sidebar-bg/50" th:text="${user.salary != null ? '₹' + user.salary : 'Not specified'}"></p>
+                            </div>
+                        </div>
+
+                        <!-- About Section - Full Width -->
+                        <div class="mt-6">
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">About</label>
+                            <p class="text-gray-300 border-2 border-[#F8DE7E] p-3 rounded-lg bg-sidebar-bg/50 min-h-[100px]" th:text="${user.about ?: 'Not specified'}"></p>
+                        </div>
+                    </div>
+        </section>div>
+    </body> </div>
+</html> </section>
+    </body>
+</html>

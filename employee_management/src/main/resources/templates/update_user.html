@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin_base::Layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Your Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <section>
+        <div class="container mx-auto p-6 max-w-4xl">
+            <!-- Form Container -->
+            <div class="flex flex-col md:flex-row bg-sidebar-bg border-2 border-[#F8DE7E] shadow-xl rounded-lg overflow-hidden">
+                <!-- Left Side - Profile Image -->
+                <div class="w-full md:w-1/3 bg-sidebar-bg p-8 border-r border-[#F8DE7E]/30">
+                    <div class="flex flex-col items-center">
+                        <div class="w-32 h-32 mb-4">
+                            <div class="relative group">
+                                <img id="previewImage" th:src="@{'/img/profile/' + ${user.imageUrl}}"
+                                     class="w-full h-full rounded-full object-cover border-4 border-[#F8DE7E]"
+                                     onerror="this.src='/img/profile/default.png'">
+                                <label for="imageFile" 
+                                       class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 
+                                              rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#F8DE7E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                </label>
+                                <input type="file" id="imageFile" name="imageFile" accept="image/*" 
+                                       class="hidden" onchange="previewImage(event)">
+                            </div>
+                        </div>
+                        <h3 class="text-2xl mt-8 font-bold text-[#F8DE7E] mb-2" th:text="${user.name}"></h3>
+                        <p class="text-gray-400" th:text="${user.designation ?: 'Admin'}"></p>
+                    </div>
+                </div>
+
+                <!-- Right Side - Update Form -->
+                <div class="w-full md:w-2/3 bg-sidebar-bg p-8">
+                    <div class="mb-6 flex justify-between items-center">
+                        <h2 class="text-3xl font-bold text-[#F8DE7E]">Update Profile</h2>
+                    </div>
+
+                    <form th:action="@{/admin/process-update}" method="post" enctype="multipart/form-data" 
+                          th:object="${user}" class="space-y-6">
+                        <input type="hidden" name="user_id" th:value="${user.user_id}" />
+                        
+                        <!-- Form Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Name</label>
+                                <input type="text" name="name" th:value="${user.name}"
+                                       class="w-full px-4 py-2 bg-sidebar-bg/50 border-2 border-[#F8DE7E] text-gray-300 
+                                              rounded-lg focus:outline-none focus:border-[#f5d76e]">
+                            </div>
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Email</label>
+                                <input type="email" name="email" th:value="${user.email}"
+                                       class="w-full px-4 py-2 bg-sidebar-bg/50 border-2 border-[#F8DE7E] text-gray-300 
+                                              rounded-lg focus:outline-none focus:border-[#f5d76e]">
+                            </div>
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Phone</label>
+                                <input type="tel" name="phone_no" th:value="${user.phone_no}"
+                                       class="w-full px-4 py-2 bg-sidebar-bg/50 border-2 border-[#F8DE7E] text-gray-300 
+                                              rounded-lg focus:outline-none focus:border-[#f5d76e]">
+                            </div>
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Designation</label>
+                                <input type="text" name="designation" th:value="${user.designation}"
+                                       class="w-full px-4 py-2 bg-sidebar-bg/50 border-2 border-[#F8DE7E] text-gray-300 
+                                              rounded-lg focus:outline-none focus:border-[#f5d76e]">
+                            </div>
+                            <div>
+                                <label class="block text-[#F8DE7E] text-sm font-bold mb-2">Salary</label>
+                                <input type="text" name="salary" th:value="${user.salary}"
+                                       class="w-full px-4 py-2 bg-sidebar-bg/50 border-2 border-[#F8DE7E] text-gray-300 
+                                              rounded-lg focus:outline-none focus:border-[#f5d76e]">
+                            </div>
+                        </div>
+
+                        <!-- About Field -->
+                        <div>
+                            <label class="block text-[#F8DE7E] text-sm font-bold mb-2">About</label>
+                            <textarea name="about" rows="4" th:text="${user.about}"
+                                      class="w-full px-4 py-2 bg-sidebar-bg/50 border-2 border-[#F8DE7E] text-gray-300 
+                                             rounded-lg focus:outline-none focus:border-[#f5d76e] resize-none"></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-end mt-6">
+                            <button type="submit" 
+                                    class="px-6 py-2 bg-[#F8DE7E] text-gray-800 rounded-lg hover:bg-[#f5d76e] 
+                                           transition-all duration-300 font-semibold flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('previewImage');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>

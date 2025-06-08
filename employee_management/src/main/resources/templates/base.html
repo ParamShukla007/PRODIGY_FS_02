@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="Layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee</title>
+    
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-red': {
+                            DEFAULT: '#c4322b',
+                            'light': '#d04b44',
+                            'dark': '#a52a24'
+                        },
+                        'brand-navy': {
+                            DEFAULT: '#1e2430',
+                            'light': '#2a3241',
+                            'dark': '#16191f'
+                        },
+                        'brand-cream': {
+                            DEFAULT: '#f5ecd6'
+                        }
+                    },
+                    fontFamily: {
+                        'tahoma': ['Tahoma', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <style>
+        body {
+            background-color: #1e2430;
+            font-family: 'Tahoma', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #f5ecd6;
+        }
+        
+        .sidebar {
+            background-color: #1e2430;
+            width: 110px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 40px;
+            z-index: 20;
+        }
+        
+        .vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-orientation: mixed;
+            white-space: nowrap;
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+            display: flex;
+            height: 80%;
+            text-align: center;
+            justify-content: center;
+            letter-spacing: 2px;
+        }
+        
+        .main-content {
+            margin-left: 110px;
+            position: relative;
+            min-height: 100vh;
+            background-color: #c4322b;
+            overflow-x: hidden;
+        }
+        
+        .bg-texture {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23b72a24' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        /* Animation styles */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        /* Navigation styles */
+        .nav-container {
+            background-color: rgba(30, 36, 48, 0.9);
+            padding: 1rem;
+        }
+        
+        .nav-link {
+            color: #f5ecd6;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #d04b44;
+        }
+        
+        .nav-link.active {
+            border-bottom: 2px solid #f5ecd6;
+        }
+
+        /* New styles for the updated navigation */
+        nav {
+            background-color: #252b3b;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-logo img {
+            height: 2rem;
+            width: 2rem;
+            margin-right: 0.5rem;
+        }
+        
+        .nav-logo span {
+            color: #F8DE7E;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        
+        /* Navigation Links - Desktop */
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #D1D5DB;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #F8DE7E;
+        }
+        
+        /* Mobile menu button */
+        .mobile-menu-button {
+            display: block;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            padding: 0.5rem;
+            gap: 0.5rem;
+        }
+        
+        .mobile-menu a {
+            color: #D1D5DB;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .mobile-menu a:hover {
+            color: #F8DE7E;
+        }
+
+        /* Add padding to the main content to account for fixed navbar */
+        body {
+            padding-top: 4rem;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #F8DE7E;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+  
+
+    <!-- Main Content -->
+    <div class="main-content">
+     
+        <!-- Navigation -->
+        <nav class="bg-[#252b3b] fixed top-0 left-0 right-0 z-50 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Logo -->
+                    <div class="flex items-center">
+    <div class="flex items-center space-x-2">
+        <!-- Logo container with yellow background -->
+        <div class="w-8 h-8 bg-[#F8DE7E] rounded-lg flex items-center justify-center">
+            <!-- Stack icon -->
+            <svg class="w-4 h-4 text-[#252b3b]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2H6V5z"/>
+                <path d="M4 9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2H4V9z"/>
+                <path d="M2 13a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/>
+            </svg>
+        </div>
+        <!-- Brand name -->
+        <span class="text-[#F8DE7E] text-xl font-bold">Onboardly</span>
+    </div>
+</div>
+
+                    <!-- Navigation Links - Desktop -->
+                    <div class="hidden md:flex items-center space-x-4">
+    <!-- Home Button -->
+    <div class="bg-[#F8DE7E] rounded-lg flex items-center px-4 py-2 hover:bg-[#f5d76e] transition-all">
+        <svg class="w-4 h-4 text-[#252b3b] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <a href="/" class="text-[#252b3b] text-sm font-medium">
+            Home
+        </a>
+    </div>
+
+    <!-- Login Button -->
+    <div class="bg-[#F8DE7E] rounded-lg flex items-center px-4 py-2 hover:bg-[#f5d76e] transition-all">
+        <svg class="w-4 h-4 text-[#252b3b] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+        </svg>
+        <a href="/login" class="text-[#252b3b] text-sm font-medium">
+            Login
+        </a>
+    </div>
+</div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden">
+                        <button type="button" class="text-gray-300 hover:text-[#F8DE7E]" id="mobileMenuButton">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu -->
+            <div class="hidden md:hidden" id="mobileMenu">
+                <div class="px-2 pt-2 pb-3 space-y-2">
+                    <div class="bg-[#F8DE7E] rounded-lg p-2">
+            <a href="/" class="flex items-center text-[#252b3b]">
+                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Home
+            </a>
+        </div>
+        <div class="bg-[#F8DE7E] rounded-lg p-2">
+            <a href="/login" class="flex items-center text-[#252b3b]">
+                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                </svg>
+                Login
+            </a>
+        </div>
+    </div>
+</div>
+        </nav>
+        
+        <!-- Content from child templates -->
+        <div class="relative z-10 w-full">
+            <div th:replace="${content}">
+                <!-- This will be replaced by content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Intersection Observer for scroll animations
+            const animatedElements = document.querySelectorAll('.animate-fadeInUp');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.visibility = 'visible';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(element => {
+                element.style.visibility = 'hidden';
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

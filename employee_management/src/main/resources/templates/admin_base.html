@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/199/xhtml" xml:lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="Layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboardly - Employee Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sidebar-bg': '#2d3748',
+                        'sidebar-hover': '#4a5568',
+                        'sidebar-active': '#EAB308', // Changed to yellow
+                        'brand-green': '#EAB308'     // Changed to yellow
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+        .sidebar-item:hover {
+            background-color: #4a5568;
+            transform: translateX(4px);
+        }
+        .sidebar-item.active {
+            background-color: #F8DE7E !important;  /* Yellow color */
+            color: #1e2430 !important;  /* Dark text for contrast */
+            border-right: 4px solid #F8DE7E;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 16rem); /* 16rem is the width of sidebar (w-64) */
+            margin-left: auto;
+            overflow-x: hidden;
+        }
+
+        .bg-texture {
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body {
+            background-color: #1e2430;
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex">
+    <!-- Sidebar -->
+    <div class="w-64 bg-sidebar-bg min-h-screen shadow-xl">
+        <!-- Logo Section -->
+        <div class="p-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-yellow-200 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-layer-group text-grey text-sm"></i>
+                </div>
+                <span class="logo-text text-white">Onboardly</span>
+            </div>
+        </div>
+
+        <!-- Menu Section -->
+        <div class="p-4">
+            <h3 class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">Menu</h3>
+            
+            <!-- Dashboard -->
+            <a th:href="@{/admin/dashboard1}" class="sidebar-item flex items-center space-x-3 text-gray-300 p-3 rounded-lg mb-1">
+                <i class="fas fa-th-large w-5"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Recruitment -->
+            <a th:href="@{/admin/admin_register}" class="sidebar-item flex items-center space-x-3 text-gray-300 p-3 rounded-lg mb-1">
+                <i class="fas fa-user-plus w-5"></i>
+                <span>
+                Add Employee
+                </span>
+            </a>
+             <a th:href="@{/admin/users}" class="sidebar-item flex items-center space-x-3 text-gray-300 p-3 rounded-lg mb-1">
+                 <i class="fas fa-users w-5"></i>
+                <span>View Employee</span>
+            </a>
+           
+            <!-- Attendance -->
+            <a th:href="@{/admin/profile1}" class="sidebar-item flex items-center space-x-3 text-gray-300 p-3 rounded-lg mb-1">
+                <i class="fas fa-user w-5"></i>
+                <span>Profile</span>
+            </a>
+
+        </div>
+
+        <!-- Department Section -->
+        <div class="p-4">
+            
+        </div>
+
+        <!-- Others Section -->
+        <div class="p-4">
+            <h3 class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">Others</h3>
+            
+          
+<!-- Settings -->              
+<form method="POST" th:action="@{'/admin/update-password'}" class="w-full">             
+    <button type="submit" class="sidebar-item flex items-center space-x-3 text-gray-300 p-3 rounded-lg w-full text-left">                 
+        <i class="fas fa-cog w-5"></i>                 
+        <span>Settings</span>             
+    </button>             
+</form>     
+            <!-- Log out -->
+            <a href="/logout" class="sidebar-item flex items-center space-x-3 text-gray-300 p-3 rounded-lg">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>Log out</span>
+            </a>
+        </div>
+    </div>
+<div class="main-content flex-1 bg-[#1e2430] min-h-screen" id="main-content">
+    <!-- Background texture -->
+    <div class="bg-texture absolute inset-0"></div>
+    
+    <!-- Content from child templates -->
+    <div class="relative z-10 h-full">
+        <div th:replace="${content}" class="h-full"></div>
+    </div>
+</div>
+
+    <script>
+    // Function to remove active class from all items
+    function removeActiveClass() {
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+        });
+    }
+
+    // Add click functionality to sidebar items
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Store the clicked item in sessionStorage
+            const href = this.getAttribute('href') || 
+                        (this.closest('form') ? this.closest('form').action : '');
+            sessionStorage.setItem('activeItem', href);
+            
+            // Remove active class from all items
+            removeActiveClass();
+            
+            // Add active class to clicked item
+            this.classList.add('active');
+        });
+    });
+
+    // Set active state on page load
+    window.addEventListener('load', () => {
+        const currentPath = window.location.pathname;
+        const activeItem = sessionStorage.getItem('activeItem');
+
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            const href = item.getAttribute('href') || 
+                        (item.closest('form') ? item.closest('form').action : '');
+            
+            // Check if this item was the last clicked or matches current path
+            if ((activeItem && href.includes(activeItem)) || 
+                (!activeItem && href.includes(currentPath))) {
+                removeActiveClass();
+                item.classList.add('active');
+            }
+        });
+    });
+</script>
+</body>
+</html>
