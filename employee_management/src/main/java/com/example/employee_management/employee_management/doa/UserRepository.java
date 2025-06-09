@@ -27,4 +27,5 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 
     @Query("SELECT COUNT(u.user_id) FROM User u")
     Long getTotalEmployees();
+
 }

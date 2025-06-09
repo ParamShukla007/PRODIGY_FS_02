@@ -28,9 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 import java.util.List;
-
 import java.util.Map;
-
 
 @Controller
 @RequestMapping("/admin")
@@ -43,7 +41,7 @@ public class AdminController {
     
     @Autowired
     private DashboardService dashboardService;
-  
+    
     @ModelAttribute
     public void addCommonAttributes(Model model, Principal principal) {
         if (principal != null) {

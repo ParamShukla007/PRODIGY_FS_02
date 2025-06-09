@@ -122,9 +122,16 @@
                 <div class="bg-[#252b3b] p-6 rounded-2xl border-2 border-[#F8DE7E]">
                     <h2 class="text-xl font-bold text-[#F8DE7E] mb-6">Top Paid Employees</h2>
                     <div class="space-y-4">
-                        <div th:each="employee : ${topPaidEmployees}" class="flex items-center justify-between">
-                            <span class="text-gray-300" th:text="${employee[0]}"></span>
-                            <span class="text-[#F8DE7E]">₹<span th:text="${employee[1]}"></span></span>
+                        <div th:each="employee, iterStat : ${topPaidEmployees}" 
+                             class="relative">
+                            <div class="flex items-center justify-between pb-4">
+                                <span class="text-gray-300" th:text="${employee[0]}"></span>
+                                <span class="text-[#F8DE7E]">₹<span th:text="${employee[1]}"></span></span>
+                            </div>
+                            <!-- Add divider line except for last item -->
+                            <div th:unless="${iterStat.last}" 
+                                 class="absolute bottom-0 left-0 right-0 border-b border-gray-700">
+                            </div>
                         </div>
                     </div>
                 </div>
