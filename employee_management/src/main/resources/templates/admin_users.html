@@ -62,7 +62,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <img th:src="@{'/img/profile/' + ${user.imageUrl}}"
+                                        <img th:src="${user.imageUrl}"
                                              class="h-10 w-10 rounded-full object-cover border-2 border-[#F8DE7E]"
                                              onerror="this.src='/img/profile/default.png'">
                                     </div>
@@ -114,29 +114,25 @@
         </div>
 
         <!-- Modal for Details -->
-        <div id="detailsModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div class="relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-white rounded-lg shadow-xl">
+        <div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+            <div class="relative w-full max-w-md mx-auto bg-[#252b3b] rounded-2xl shadow-2xl border-2 border-[#F8DE7E] animate-fadeInUp">
                 <!-- Modal Header -->
-                <div class="px-6 py-4 border-b">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-medium text-gray-900">About Employee</h3>
-                        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
+                <div class="flex items-center justify-between px-6 py-4 border-b border-[#F8DE7E]/40">
+                    <h3 class="text-lg font-bold text-[#F8DE7E]">About Employee</h3>
+                    <button onclick="closeModal()" class="text-[#F8DE7E] hover:text-[#ffe28a] transition">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                
                 <!-- Modal Content -->
-                <div class="px-6 py-4">
-                    <p id="modalContent" class="text-sm text-gray-500"></p>
+                <div class="px-6 py-6">
+                    <p id="modalContent" class="text-base text-gray-200"></p>
                 </div>
-                
                 <!-- Modal Footer -->
-                <div class="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end">
+                <div class="px-6 py-4 border-t border-[#F8DE7E]/40 flex justify-end rounded-b-2xl">
                     <button onclick="closeModal()" 
-                            class="px-4 py-2 bg-[#F8DE7E] text-gray-700 rounded-md hover:bg-[#f5d76e] transition-all">
+                            class="px-4 py-2 bg-[#F8DE7E] text-[#252b3b] font-semibold rounded-md hover:bg-[#ffe28a] transition-all">
                         Close
                     </button>
                 </div>

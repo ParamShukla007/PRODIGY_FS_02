@@ -2,10 +2,6 @@ package com.example.employee_management.employee_management.Controller;
 
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -22,9 +18,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 import java.util.List;
@@ -41,6 +34,9 @@ public class AdminController {
     
     @Autowired
     private DashboardService dashboardService;
+    
+    @Autowired
+    private CloudinaryService cloudinaryService;
     
     @ModelAttribute
     public void addCommonAttributes(Model model, Principal principal) {
@@ -93,30 +89,18 @@ public class AdminController {
             // Debug logging
             System.out.println("Received user data: " + user.toString());
 
-            // Initialize imageUrl before handling file upload
-            user.setImageUrl("default.png");
-
-            // Handle profile image upload
+            // Handle profile image upload with Cloudinary
             if (file != null && !file.isEmpty()) {
                 try {
-                    // Generate unique filename
-                    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                    
-                    // Create directories if they don't exist
-                    String uploadDir = "src/main/resources/static/img/profile/";
-                    File directory = new File(uploadDir);
-                    if (!directory.exists()) {
-                        directory.mkdirs();
-                    }
-
-                    // Save file
-                    Path path = Paths.get(uploadDir + fileName);
-                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    user.setImageUrl(fileName);
+                    String imageUrl = cloudinaryService.uploadFile(file);
+                    user.setImageUrl(imageUrl);
                 } catch (Exception e) {
-                    System.err.println("Error saving file: " + e.getMessage());
-                    // Continue with default image if file upload fails
+                    System.err.println("Error uploading to Cloudinary: " + e.getMessage());
+                    // Continue with default image if upload fails
+                    user.setImageUrl("default.png");
                 }
+            } else {
+                user.setImageUrl("default.png");
             }
 
             // Set default role if not present
@@ -213,21 +197,15 @@ public class AdminController {
 
                 // Process and upload file only if a new file is provided
                 if (file != null && !file.isEmpty()) {
-                    // Delete old image
-                    if (oldUser.getImageUrl() != null && !oldUser.getImageUrl().isEmpty()) {
-                        File deleteFile = new ClassPathResource("static/img/profile").getFile();
-                        File oldUserImageFile = new File(deleteFile, oldUser.getImageUrl());
-                        if (oldUserImageFile.exists()) {
-                            oldUserImageFile.delete();
-                        }
+                    try {
+                        // Upload new image to Cloudinary
+                        String imageUrl = cloudinaryService.uploadFile(file);
+                        user.setImageUrl(imageUrl);
+                    } catch (Exception e) {
+                        System.err.println("Error uploading to Cloudinary: " + e.getMessage());
+                        // If upload fails, keep the old image
+                        user.setImageUrl(oldUser.getImageUrl());
                     }
-
-                    // Save new image
-                    File saveFile = new ClassPathResource("static/img/profile").getFile();
-                    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename(); // Add timestamp to prevent duplicates
-                    Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + fileName);
-                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    user.setImageUrl(fileName);
                 } else {
                     // If no new file is uploaded, keep the existing image
                     user.setImageUrl(oldUser.getImageUrl());
